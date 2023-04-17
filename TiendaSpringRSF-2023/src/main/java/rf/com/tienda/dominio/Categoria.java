@@ -1,33 +1,40 @@
 package rf.com.tienda.dominio;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToOne;
-import rf.com.tienda.util.Validator;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+import rf.com.tienda.exception.DomainException;
+import rf.com.tienda.util.*;
 
 /**
  * 
  * Nombre		Categoria
  * Descripcion	Lista de categorías
  * @author 		Miguel Garcia
- * @version		13 de abr. de 2016
+ * @version		13 de abr. de 2023
  *
  */
 @Entity
+@Table(name = "categoria")
 public class Categoria {
-	
 	@Id
-	@GeneratedValue(strategy=GenerationType.IDENTITY)
+	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id_categoria;			//identificador categoria
-	@OneToOne
-	private String cat_nombre;			//nombre de la categoria
 	
+	@Column(nullable = false)
+	private String cat_nombre;          //nombre de la categoria
+	
+	@Column
 	private String cat_descripcion;		//descripcion de la categoria
 	
 	
-	public Categoria(){}
+	public Categoria(){
+		
+	}
 	
 	
 	public boolean isValid(){	
@@ -48,7 +55,10 @@ public class Categoria {
 	 * 
 	 */
 	public void setId_categoria(int id_categoria) {
-		this.id_categoria = id_categoria;
+		if (id_categoria > 0) {
+			this.id_categoria = id_categoria;
+
+		}
 	}
 	
 	/**
@@ -57,14 +67,20 @@ public class Categoria {
 	 */
 	public String getCat_nombre() {
 		return cat_nombre;
+		
 	}
 	
 	/**
 	 * Setter para el nombre de categoria
 	 * 
 	 */
-	public void setCat_nombre(String cat_nombre) {
-		this.cat_nombre = cat_nombre;
+	public void setCat_nombre(String cat_nombre) throws DomainException{
+		if (Validator.cumpleLongitud(cat_nombre, 5, 50)) {
+			this.cat_nombre = cat_nombre;
+		}else {
+			throw new DomainException("No cumple con la longitud (5 - 50 letras)");
+		}
+		
 	}
 	
 	/**
@@ -77,10 +93,16 @@ public class Categoria {
 	
 	/**
 	 * setter para la descripcion de categoria
+	 * @throws DomainException 
 	 * 
 	 */
-	public void setCat_descripcion(String cat_descripcion) {
-		this.cat_descripcion = cat_descripcion;
+	public void setCat_descripcion(String cat_descripcion) throws DomainException {
+		if (Validator.cumpleLongitudMax(cat_descripcion, 200)) {
+			this.cat_descripcion = cat_descripcion;
+
+		}else {
+			throw new DomainException("Sobrepasa la longitud maxima");
+		}
 	}
 
 
