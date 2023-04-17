@@ -6,7 +6,7 @@ import org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration;
 
 import rf.com.tienda.dominio.Categoria;
 
-@SpringBootApplication(exclude = {DataSourceAutoConfiguration.class})
+@SpringBootApplication
 public class TiendaSpringRsf2023Application {
 
 	public static void main(String[] args) {

@@ -1,14 +1,14 @@
 package rf.com.tienda.dominio;
 
-
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+
 import rf.com.tienda.exception.DomainException;
-import rf.com.tienda.util.*;
+import rf.com.tienda.util.Validator;
 
 /**
  * 
@@ -21,6 +21,7 @@ import rf.com.tienda.util.*;
 @Entity
 @Table(name = "categoria")
 public class Categoria {
+	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private int id_categoria;			//identificador categoria
