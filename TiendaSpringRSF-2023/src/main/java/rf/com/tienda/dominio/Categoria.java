@@ -11,14 +11,6 @@ import rf.com.tienda.exception.DomainException;
 import rf.com.tienda.util.ErrorMessages;
 import rf.com.tienda.util.Validator;
 
-/**
- * 
- * Nombre		Categoria
- * Descripcion	Lista de categorías
- * @author 		Miguel Garcia
- * @version		13 de abr. de 2023
- *
- */
 @Entity
 @Table(schema = "RSF_alumno", name = "CATEGORIA")
 public class Categoria {

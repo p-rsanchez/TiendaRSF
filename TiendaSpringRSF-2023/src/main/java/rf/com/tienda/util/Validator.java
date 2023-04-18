@@ -53,6 +53,8 @@ public class Validator {
 	 */
 	private final static int LONGITUD_DNI = 12;
 
+	private final static String IDPRODUCTO_VALIDO = "^[A-Z0-9]{5}$";
+	
 	/* ***************************************************************************************
 	 * NOMBRE: isAlfanumeric                                                                 *
 	 * 
@@ -68,15 +70,20 @@ public class Validator {
 	 * AUTOR: Miguel Garcia - Barcelona
 	 * 
 	 * **************************************************************************************/
-	public static boolean isAlfanumeric(String texto){
-		Pattern miPattern = Pattern.compile(ALFANUMERIC_PATTERN);
-		Matcher matcher = miPattern.matcher(texto);
+	
+	public static boolean metodoPattern(String pattern, String texto) {
+		Pattern patterner = Pattern.compile(pattern);
 
-		if (matcher.find()) {
+		if (patterner.matches(pattern, texto)) {
 			return true;
 		}
 
 		return false;
+	}
+	
+	
+	public static boolean isAlfanumeric(String texto){
+		return metodoPattern(ALFANUMERIC_PATTERN, texto);
 	}
 	
 	public static boolean isVacio( String prueba ){
@@ -104,14 +111,7 @@ public class Validator {
 	 * 
 	 * **************************************************************************************/
 	public static boolean cumplePhoneNumber(String phoneNumber){
-		Pattern miPattern = Pattern.compile(PHONE_PATTERN);
-		Matcher matcher = miPattern.matcher(phoneNumber);
-
-		if (matcher.find()) {
-			return true;
-		}
-
-		return false;
+		return metodoPattern(PHONE_PATTERN, phoneNumber);
 	}
 
 	/* ***************************************************************************************
@@ -129,14 +129,7 @@ public class Validator {
 	 * 
 	 * **************************************************************************************/
 	public static boolean isEmailValido(String email){
-		Pattern miPattern = Pattern.compile(EMAIL_PATTERN);
-		Matcher matcher = miPattern.matcher(email);
-
-		if (matcher.find()) {
-			return true;
-		}
-
-		return false;
+		return metodoPattern(EMAIL_PATTERN, email);
 	}
 
 	/* ***************************************************************************************
@@ -154,15 +147,7 @@ public class Validator {
 	 * 
 	 * **************************************************************************************/
 	public static boolean cumpleDNI(String dni){
-		Pattern miPattern = Pattern.compile(DNI_PATTERN);
-		Matcher matcher = miPattern.matcher(dni);
-
-		if (matcher.find()) {
-			return true;
-		}
-
-		return false;
-		
+		return metodoPattern(DNI_PATTERN, dni);
 	}
 	
 
@@ -340,14 +325,10 @@ public class Validator {
 	 * @return true si cumple con las especificaciones
 	 */
 	public static boolean esPasswordValida(String password){
-		Pattern miPattern = Pattern.compile(PASSWORD_PATTERN);
-		Matcher matcher = miPattern.matcher(password);
-
-		if (matcher.find()) {
-			return true;
-		}
-
-		return false;
-
+		return metodoPattern(PASSWORD_PATTERN, password);
+	}
+	
+	public static boolean idProductoValida(String id_producto) {
+		return metodoPattern(IDPRODUCTO_VALIDO, id_producto);
 	}
 }
