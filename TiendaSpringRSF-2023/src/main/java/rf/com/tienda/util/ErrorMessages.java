@@ -28,6 +28,8 @@ public class ErrorMessages {
 	 */
 	public final static String PROERR_003 = "La longitud de ? ha de estar entre ? y ?";
 	
+	public final static String CATERR_001 = "Longitud del campo erronea.";
+	
 	
 
 }

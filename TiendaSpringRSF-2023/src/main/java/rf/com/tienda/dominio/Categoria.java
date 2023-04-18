@@ -8,6 +8,7 @@ import javax.persistence.Id;
 import javax.persistence.Table;
 
 import rf.com.tienda.exception.DomainException;
+import rf.com.tienda.util.ErrorMessages;
 import rf.com.tienda.util.Validator;
 
 /**
@@ -19,17 +20,17 @@ import rf.com.tienda.util.Validator;
  *
  */
 @Entity
-@Table(name = "categoria")
+@Table(schema = "RSF_alumno", name = "CATEGORIA")
 public class Categoria {
 	
 	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
+	@GeneratedValue(strategy = GenerationType.TABLE)
 	private int id_categoria;			//identificador categoria
 	
-	@Column(nullable = false)
+	@Column(nullable = false, columnDefinition = "VARCHAR(50)")
 	private String cat_nombre;          //nombre de la categoria
 	
-	@Column
+	@Column(nullable = false, columnDefinition = "VARCHAR(200) DEFAULT NULL")
 	private String cat_descripcion;		//descripcion de la categoria
 	
 	
@@ -79,7 +80,7 @@ public class Categoria {
 		if (Validator.cumpleLongitud(cat_nombre, 5, 50)) {
 			this.cat_nombre = cat_nombre;
 		}else {
-			throw new DomainException("No cumple con la longitud (5 - 50 letras)");
+			throw new DomainException(ErrorMessages.CATERR_001);
 		}
 		
 	}
@@ -102,7 +103,7 @@ public class Categoria {
 			this.cat_descripcion = cat_descripcion;
 
 		}else {
-			throw new DomainException("Sobrepasa la longitud maxima");
+			throw new DomainException(ErrorMessages.CATERR_001);
 		}
 	}
 
