@@ -3,6 +3,7 @@ package rf.com.tienda.util;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
+import java.util.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -300,6 +301,12 @@ public class Validator {
 		
 	}	
 	
+	public static boolean esFechaActualMenor(Date fecha) {
+	    Date fechaActual = new Date();
+
+	    return !fecha.before(fechaActual);
+	}
+	
 	/**
 	 * esFechaValida
 	 * Recibe una string con formato fecha dd/mm/aaaa y comprueba el formato
@@ -307,7 +314,6 @@ public class Validator {
 	 * @return
 	 */
 	public static boolean esFechaValida(String fecha){
-		
 		try {
 			LocalDate fechaValida = LocalDate.parse(fecha, DateTimeFormatter.ISO_DATE);
 		}catch(DateTimeParseException e) {

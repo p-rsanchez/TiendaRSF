@@ -1,13 +1,13 @@
 package rf.com.tienda.dominio;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.Table;
-
-import org.hibernate.annotations.ColumnDefault;
 
 import rf.com.tienda.exception.DomainException;
 import rf.com.tienda.util.ErrorMessages;
@@ -17,50 +17,44 @@ import rf.com.tienda.util.Validator;
 @Table(schema = "RSF_alumno", name = "PRODUCTO")
 public class Producto {
 	
-//decimales = 2
+//scale = 2
 //nullable = false obligatorio null
 
 	@Id
 	private String id_producto;
-	@Column(nullable = false, columnDefinition = "VARCHAR(100) NOT NULL DEFAULT ''")
+    @Column(nullable = false)
 	private String pro_descripcion;
-	@Column()
+	@Column
 	private String pro_desLarga;
-	@Column(nullable = false, scale = 2)
+    @Column(nullable = false, precision = 10, scale = 2)
 	private Double pro_precio;
-	@Column()
-	@ColumnDefault("INTEGER DEFAULT 0")
+    @Column(nullable = true, columnDefinition = "INTEGER DEFAULT 0")
 	private Integer pro_stock;
-	@Column()
-	private Date pro_fecRepos;
-	@Column()
-	private Date pro_fecActi;
-	@Column()
-	private Date pro_fecDesacti;
+    @Column(nullable = true)
+    private Date pro_fecRepos;
+    @Column(nullable = true)
+    private Date pro_fecActi;
+    @Column(nullable = true)
+    private Date pro_fecDesacti;
 	@Column(nullable = false)
 	private String pro_uniVenta;
-	@Column()
-	@ColumnDefault("INTEGER DEFAULT 0")
+	@Column(scale = 2, columnDefinition = "FLOAT DEFAULT 0")
 	private Double pro_cantXUniVenta;
-	@Column()
+	@Column
 	private String pro_uniUltNivel;
-	@Column(nullable = false)
-	private Integer id_pais;
-	@Column()
+	@Column
+	private String id_pais;
+	@Column
 	private String pro_usoRecomendado;
 	@Column(nullable = false)
 	private Integer id_categoria;
-	@Column()
-	@ColumnDefault("INTEGER DEFAULT 0")
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
 	private Integer pro_stkReservado;
-	@Column()
-	@ColumnDefault("INTEGER DEFAULT 0")
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
 	private Integer pro_nStkAlto;
-	@Column()
-	@ColumnDefault("INTEGER DEFAULT 0")
+    @Column(columnDefinition = "INTEGER DEFAULT 0")
 	private Integer pro_nStkBajo;
-	@Column()
-	@ColumnDefault("A")
+    @Column(columnDefinition = "CHAR(1) DEFAULT 'A'")
 	private char pro_stat;
 
 	
@@ -89,8 +83,12 @@ public class Producto {
 	}
 
 
-	public void setPro_descripcion(String pro_descripcion) {
-		this.pro_descripcion = pro_descripcion;
+	public void setPro_descripcion(String pro_descripcion) throws DomainException {
+		if(Validator.cumpleLongitud(pro_descripcion, 5, 100)) {
+			this.pro_descripcion = pro_descripcion;
+		}else {
+			throw new DomainException(ErrorMessages.CATERR_001);
+		}
 	}
 
 
@@ -99,8 +97,12 @@ public class Producto {
 	}
 
 
-	public void setPro_desLarga(String pro_desLarga) {
-		this.pro_desLarga = pro_desLarga;
+	public void setPro_desLarga(String pro_desLarga) throws DomainException {
+		if(Validator.cumpleLongitud(pro_descripcion, 5, 100)) {
+			this.pro_desLarga = pro_desLarga;
+		}else {
+			throw new DomainException(ErrorMessages.CATERR_001);
+		}
 	}
 
 
@@ -109,8 +111,12 @@ public class Producto {
 	}
 
 
-	public void setPro_precio(Double pro_precio) {
-		this.pro_precio = pro_precio;
+	public void setPro_precio(Double pro_precio) throws DomainException {
+		if(Validator.cumpleRango(pro_precio, 0, 100)) {
+			this.pro_precio = pro_precio;
+		}else {
+			throw new DomainException(ErrorMessages.PROERR_004);
+		}
 	}
 
 
@@ -129,8 +135,14 @@ public class Producto {
 	}
 
 
-	public void setPro_fecRepos(Date pro_fecRepos) {
-		this.pro_fecRepos = pro_fecRepos;
+	public void setPro_fecRepos(Date pro_fecRepos) throws DomainException, ParseException {
+		if(Validator.esFechaActualMenor(pro_fecRepos)) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String fechaFormateada = dateFormat.format(pro_fecRepos);
+			this.pro_fecRepos = dateFormat.parse(fechaFormateada);
+		}else {
+			throw new DomainException(ErrorMessages.PROERR_005);
+		}
 	}
 
 
@@ -139,8 +151,14 @@ public class Producto {
 	}
 
 
-	public void setPro_fecActi(Date pro_fecActi) {
-		this.pro_fecActi = pro_fecActi;
+	public void setPro_fecActi(Date pro_fecActi) throws DomainException, ParseException {
+		if(Validator.esFechaActualMenor(pro_fecActi)) {
+			SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+			String fechaFormateada = dateFormat.format(pro_fecActi);
+			this.pro_fecActi = dateFormat.parse(fechaFormateada);
+		}else {
+			throw new DomainException(ErrorMessages.PROERR_005);
+		}
 	}
 
 
@@ -149,8 +167,22 @@ public class Producto {
 	}
 
 
-	public void setPro_fecDesacti(Date pro_fecDesacti) {
-		this.pro_fecDesacti = pro_fecDesacti;
+	public void setPro_fecDesacti(Date pro_fecDesacti) throws DomainException {
+		
+		if(this.pro_fecActi != null) {
+			if(!pro_fecDesacti.before(this.pro_fecDesacti)) {
+				this.pro_fecDesacti = pro_fecDesacti;
+			}else {
+				throw new DomainException(ErrorMessages.PROERR_005);
+			}
+		}else {
+			if(Validator.esFechaActualMenor(pro_fecDesacti)) {
+				this.pro_fecDesacti = pro_fecDesacti;
+			}else {
+				throw new DomainException(ErrorMessages.PROERR_005);
+			}
+		}
+		
 	}
 
 
@@ -184,12 +216,12 @@ public class Producto {
 	}
 
 
-	public Integer getId_pais() {
+	public String getId_pais() {
 		return id_pais;
 	}
 
 
-	public void setId_pais(Integer id_pais) {
+	public void setId_pais(String id_pais) {
 		this.id_pais = id_pais;
 	}
 
