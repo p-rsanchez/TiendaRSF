@@ -19,7 +19,7 @@ import javax.persistence.Id;
 public class Usuario {
 
 	@Id
-	@GeneratedValue(strategy = GenerationType.TABLE)
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private int id_usuario;
 	@Column(nullable = false)
 	private String user_nombre;
